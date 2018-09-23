@@ -136,6 +136,7 @@ branch="${branch_fields[0]}"
 remote=""
 upstream=""
 
+commit_hash="$( git rev-parse --short HEAD )"
 if [[ "${branch}" == *"Initial commit on"* ]]; then
   IFS=" " read -ra fields <<< "${branch}"
   branch="${fields[3]}"
@@ -151,7 +152,7 @@ elif [[ "${branch}" == *"no branch"* ]]; then
   if [[ -n "${tag}" ]]; then
     branch="${tag}"
   else
-    branch="_PREHASH_$( git rev-parse --short HEAD )"
+    branch="_PREHASH_${commit_hash}"
   fi
 else
   if [[ "${#branch_fields[@]}" -eq 1 ]]; then
@@ -192,6 +193,7 @@ printf "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
   "${num_changed}" \
   "${num_untracked}" \
   "${num_stashed}" \
-  "${clean}"
+  "${clean}" \
+  "${commit_hash}"
 
 exit
